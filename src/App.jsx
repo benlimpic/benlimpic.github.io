@@ -1,16 +1,18 @@
+import Features from './components/Features';
+import Footer from './components/Footer';
+import Header from './components/Header';
+import Iphone from './components/Iphone'; // ✅ check this path
 import './styles/App.css';
 
-function App() {
+export default function App() {
   return (
-    <>
-      <div>
-        <h2 className="text-4xl text-red-500">Tailwind Test</h2>
-        <button className="bg-green-500 text-white px-4 py-2 rounded">
-          Click me
-        </button>
-      </div>
-    </>
+    <div className="min-h-screen text-gray-900 bg-gray-100 max-w-screen">
+      <Header />
+      <main className="flex flex-col items-center justify-center overflow-y-auto bg-gray-100">
+        <Iphone src="https://shelved-app-ad1942fd614d.herokuapp.com/login" />
+        <Features />
+      </main>
+      <Footer />
+    </div>
   );
 }
-
-export default App;
