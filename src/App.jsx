@@ -1,7 +1,7 @@
 import Features from './components/Features';
 import Footer from './components/Footer';
 import Header from './components/Header';
-import Iphone from './components/Iphone';
+import Iphone from './components/iphone/Iphone';
 import Stars from './components/stars.jsx';
 
 import './styles/App.css';
@@ -13,7 +13,7 @@ export default function App() {
       <div className="relative z-1">
         <Header />
         <main className="flex flex-col items-center justify-center py-12 overflow-y-auto bg-transparent">
-          <Iphone src="https://shelved-demo-app-039a800b182b.herokuapp.com/" />
+          <Iphone />
           <Features />
         </main>
         <Footer />
