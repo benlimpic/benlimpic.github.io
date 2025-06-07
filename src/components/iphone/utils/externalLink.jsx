@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
+import handleNewTab from './handleNewTab';
 
-const AppIcon = ({ setAppSrc, iconSrc, title, appRoute }) => {
+const ExternalLink = ({ iconSrc, title, appRoute }) => {
   return (
     <button
       className="m-3 app-icon"
       id={'app-' + title}
       type="button"
-      onClick={() => setAppSrc(appRoute)}
+      onClick={() => handleNewTab(appRoute)}
     >
       <div className={`w-14 h-14 mb-0.25 rounded-md`}>
         <img src={iconSrc} alt={title} className="rounded-xl" />
@@ -16,11 +17,10 @@ const AppIcon = ({ setAppSrc, iconSrc, title, appRoute }) => {
   );
 };
 
-AppIcon.propTypes = {
-  setAppSrc: PropTypes.func.isRequired,
+ExternalLink.propTypes = {
   iconSrc: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   appRoute: PropTypes.string.isRequired,
 };
 
-export default AppIcon;
+export default ExternalLink;

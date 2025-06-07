@@ -16,33 +16,33 @@ const IphoneFrame = () => {
       <div className="volume-buttons">
         <button
           type="button"
-          className="button volume-up"
+          className="button volume-up cycle-colors"
           id="volume-up"
+          title="brightness up"
           onClick={() => handleVolumeUp(brightness, setBrightness)}
-          aria-label="Volume Up"
         ></button>
         <button
           type="button"
-          className="button volume-down"
+          className="button volume-down cycle-colors"
           id="volume-down"
           onClick={() => handleVolumeDown(brightness, setBrightness)}
-          aria-label="Volume Down"
+          title="brightness down"
         ></button>
       </div>
       <button
         type="button"
-        className="power-button"
+        className="power-button cycle-colors"
         id="power-button"
         onClick={() => handlePowerButton(setAppSrc)}
-        aria-label="Power Button"
+        title="power Button"
       />
       <div className="dynamic-island"></div>
       <button
         type="button"
-        className="bottom-bar"
+        className="bottom-bar cycle-colors"
         id="bottom-bar"
         onClick={() => handleBottomBar(appSrc, setAppSrc)}
-        aria-label="Bottom Bar"
+        title="home button"
       />
       <div className="flex items-center justify-center w-full h-full screen">
         <div
