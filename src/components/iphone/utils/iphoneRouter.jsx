@@ -4,6 +4,7 @@ import LockScreen from '../views/lockScreen';
 import PowerOnSplash from '../views/powerOnSplash';
 import Profile from '../views/profile';
 import Resume from '../views/resume';
+import Tetris from '../views/tetris';
 
 const IphoneRouter = ({ appSrc, setAppSrc }) => {
   switch (appSrc) {
@@ -17,6 +18,8 @@ const IphoneRouter = ({ appSrc, setAppSrc }) => {
       return <Resume setAppSrc={setAppSrc} appSrc={appSrc} />;
     case 'powerOnSplash':
       return <PowerOnSplash setAppSrc={setAppSrc} appSrc={appSrc} />;
+    case 'tetris':
+      return <Tetris setAppSrc={setAppSrc} appSrc={appSrc} />;
     // etc.
     default:
       return <ApplicationPage setAppSrc={setAppSrc} appSrc={appSrc} />;
