@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+
 import DropButton from '../../../assets/tetris/downButton.png';
 import ExitButton from '../../../assets/tetris/exitButton.png';
 import LeftButton from '../../../assets/tetris/leftButton.png';
@@ -6,12 +7,16 @@ import PauseButton from '../../../assets/tetris/pauseButton.png';
 import PlayButton from '../../../assets/tetris/playButton.png';
 import RightButton from '../../../assets/tetris/rightButton.png';
 import RotateButton from '../../../assets/tetris/rotateButton.png';
+import animateClearedRows from '../utils/tetris/animateClearedRows';
+import '../utils/tetris/rowClearAnimations.css';
+import LEVEL_COLOR_THEMES from '../utils/tetris/tetrominoColors';
 
 // --- Tetris constants and helpers ---
 const STAGE_WIDTH = 10;
-const STAGE_HEIGHT = 18;
+const STAGE_HEIGHT = 20;
+
 const TETROMINOS = {
-  0: { shape: [[0]], color: '0,0,0,0' },
+  0: { shape: [[0]] },
   I: {
     shape: [
       [0, 'I', 0, 0],
@@ -19,7 +24,6 @@ const TETROMINOS = {
       [0, 'I', 0, 0],
       [0, 'I', 0, 0],
     ],
-    color: '80, 227, 230',
   },
   J: {
     shape: [
@@ -27,7 +31,6 @@ const TETROMINOS = {
       [0, 'J', 0],
       ['J', 'J', 0],
     ],
-    color: '36, 95, 223',
   },
   L: {
     shape: [
@@ -35,14 +38,12 @@ const TETROMINOS = {
       [0, 'L', 0],
       [0, 'L', 'L'],
     ],
-    color: '223, 173, 36',
   },
   O: {
     shape: [
       ['O', 'O'],
       ['O', 'O'],
     ],
-    color: '223, 217, 36',
   },
   S: {
     shape: [
@@ -50,7 +51,6 @@ const TETROMINOS = {
       ['S', 'S', 0],
       [0, 0, 0],
     ],
-    color: '48, 211, 56',
   },
   T: {
     shape: [
@@ -58,7 +58,6 @@ const TETROMINOS = {
       ['T', 'T', 'T'],
       [0, 'T', 0],
     ],
-    color: '132, 61, 198',
   },
   Z: {
     shape: [
@@ -66,7 +65,6 @@ const TETROMINOS = {
       [0, 'Z', 'Z'],
       [0, 0, 0],
     ],
-    color: '227, 78, 78',
   },
 };
 const randomTetromino = () => {
@@ -121,34 +119,6 @@ function getDisplayStage(stage, player) {
 export default function Tetris() {
   // Responsive cell size based on parent container
   const containerRef = useRef(null);
-  const [cellSize, setCellSize] = useState(18);
-
-  useEffect(() => {
-    const updateCellSize = () => {
-      if (containerRef.current) {
-        const { clientWidth, clientHeight } = containerRef.current;
-        const sizeByWidth = clientWidth / STAGE_WIDTH;
-        const sizeByHeight = clientHeight / STAGE_HEIGHT;
-        setCellSize(Math.floor(Math.min(sizeByWidth, sizeByHeight)));
-      }
-    };
-    updateCellSize();
-    window.addEventListener('resize', updateCellSize);
-    return () => window.removeEventListener('resize', updateCellSize);
-  }, []);
-
-  useEffect(() => {
-    // Also update on mount in case parent resizes after mount
-    const timeout = setTimeout(() => {
-      if (containerRef.current) {
-        const { clientWidth, clientHeight } = containerRef.current;
-        const sizeByWidth = clientWidth / STAGE_WIDTH;
-        const sizeByHeight = clientHeight / STAGE_HEIGHT;
-        setCellSize(Math.floor(Math.min(sizeByWidth, sizeByHeight)));
-      }
-    }, 100);
-    return () => clearTimeout(timeout);
-  }, []);
 
   // Game state
   const [stage, setStage] = useState(createStage());
@@ -163,6 +133,8 @@ export default function Tetris() {
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+
+  const currentTheme = LEVEL_COLOR_THEMES[Math.min(level, 29)];
 
   // --- Movement helpers using functional updates ---
   const movePlayer = (dir) => {
@@ -240,6 +212,7 @@ export default function Tetris() {
             }
           });
         });
+
         // Sweep rows
         let cleared = 0;
         const sweptStage = newStage.reduce((acc, row) => {
@@ -253,6 +226,13 @@ export default function Tetris() {
           }
           return acc;
         }, []);
+
+        // Trigger animation for row clear
+        if (cleared > 0 && containerRef.current) {
+          animateClearedRows(cleared, containerRef);
+        }
+
+        // Update stats
         setScore(
           (prev) => prev + [0, 40, 100, 300, 1200][cleared] * (level + 1)
         );
@@ -267,15 +247,15 @@ export default function Tetris() {
           tetromino: next,
           collided: false,
         };
+
         // Check for game over
         if (checkCollision(newPlayer, sweptStage, { x: 0, y: 0 })) {
           setGameOver(true);
           setDropTime(null);
           setGameStarted(false);
-          // Return previous player to avoid rendering a new piece
           return prevPlayer;
         }
-        // Return new player to spawn next piece
+
         return newPlayer;
       }
     });
@@ -339,12 +319,11 @@ export default function Tetris() {
   const controls = (
     <div
       style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 48px)',
-        gridTemplateRows: 'repeat(2, 48px)',
+        display: 'flex',
+        height: '5rem',
         gap: 8,
         justifyContent: 'center',
-        marginTop: 4,
+        marginBottom: '1rem',
       }}
     >
       <button
@@ -352,7 +331,7 @@ export default function Tetris() {
         className="control"
         style={{
           gridColumn: 1,
-          gridRow: 2,
+          gridRow: 1,
           background: 'none',
           border: 'none',
           padding: 0,
@@ -368,14 +347,38 @@ export default function Tetris() {
         <img
           src={LeftButton}
           alt="Move Left"
-          style={{ width: '48px', height: '48px', display: 'block' }}
+          style={{ width: '60px', height: '60px', display: 'block' }}
+        />
+      </button>
+      <button
+        onClick={() => handleUnpauseAnd(softDrop)}
+        className="control"
+        style={{
+          gridColumn: 2,
+          gridRow: 1,
+          background: 'none',
+          border: 'none',
+          padding: 0,
+          margin: 0,
+          cursor: 'pointer',
+          outline: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        aria-label="Move Down"
+      >
+        <img
+          src={DropButton}
+          alt="Move Down"
+          style={{ width: '60px', height: '60px', display: 'block' }}
         />
       </button>
       <button
         onClick={() => handleUnpauseAnd(rotatePlayer)}
         className="control"
         style={{
-          gridColumn: 2,
+          gridColumn: 3,
           gridRow: 1,
           background: 'none',
           border: 'none',
@@ -392,15 +395,15 @@ export default function Tetris() {
         <img
           src={RotateButton}
           alt="Rotate Right"
-          style={{ width: '48px', height: '48px', display: 'block' }}
+          style={{ width: '60px', height: '60px', display: 'block' }}
         />
       </button>
       <button
         onClick={() => handleUnpauseAnd(() => movePlayer(1))}
         className="control"
         style={{
-          gridColumn: 3,
-          gridRow: 2,
+          gridColumn: 4,
+          gridRow: 1,
           background: 'none',
           border: 'none',
           padding: 0,
@@ -416,58 +419,9 @@ export default function Tetris() {
         <img
           src={RightButton}
           alt="Move Right"
-          style={{ width: '48px', height: '48px', display: 'block' }}
+          style={{ width: '60px', height: '60px', display: 'block' }}
         />
       </button>
-      <button
-        onClick={() => handleUnpauseAnd(softDrop)}
-        className="control"
-        style={{
-          gridColumn: 2,
-          gridRow: 2,
-          background: 'none',
-          border: 'none',
-          padding: 0,
-          margin: 0,
-          cursor: 'pointer',
-          outline: 'none',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        aria-label="Move Down"
-      >
-        <img
-          src={DropButton}
-          alt="Move Down"
-          style={{ width: '48px', height: '48px', display: 'block' }}
-        />
-      </button>
-      {/* Optional: Hard Drop button (space bar equivalent) */}
-      <button
-        onClick={() => handleUnpauseAnd(hardDrop)}
-        className="control"
-        style={{
-          gridColumn: 3,
-          gridRow: 1,
-          background: 'none',
-          border: 'none',
-          padding: 0,
-          margin: 0,
-          cursor: 'pointer',
-          outline: 'none',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        aria-label="Hard Drop"
-      >
-        <span style={{ color: '#fff', fontSize: 24, fontWeight: 'bold' }}>
-          ⏬
-        </span>
-      </button>
-      <div style={{ gridColumn: 1, gridRow: 1 }} />
-      <div style={{ gridColumn: 3, gridRow: 1 }} />
     </div>
   );
 
@@ -481,7 +435,7 @@ export default function Tetris() {
         width: '100%',
         height: '100%',
         position: 'relative',
-        background: '#181818',
+        background: '#222',
         borderRadius: '12px',
         overflow: 'hidden',
         display: 'flex',
@@ -509,14 +463,12 @@ export default function Tetris() {
             <div
               key={`${y}-${x}`}
               style={{
-                width: '100%',
-                height: '100%',
                 background:
                   cell[0] === 0
                     ? 'rgba(0,0,0,0.2)'
-                    : `rgba(${TETROMINOS[cell[0]].color},0.9)`,
-                border: cell[0] === 0 ? '1px solid #222' : '1px solid #222',
-                boxSizing: 'border-box',
+                    : currentTheme.tetrominoColors[cell[0]] ??
+                      'rgba(255,255,255,0.9)',
+                border: '1px solid #222',
               }}
             />
           ))
@@ -526,32 +478,34 @@ export default function Tetris() {
       <div
         style={{
           width: '100%',
-          background: '#222',
           color: '#fff',
           display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: '1.5rem',
+          flexDirection: 'column',
+          justifyContent: 'start',
+          alignItems: 'start',
+          lineHeight: '2',
           fontSize: '1rem',
           margin: 0,
           padding: 0,
           borderTop: 'none',
-          position: 'relative',
-          top: 0,
+          position: 'absolute',
+          top: '3rem',
+          left: '0.5rem',
+          zIndex: 3,
         }}
       >
-        <span>Level: {level}</span>
-        <span>Rows: {rows}</span>
         <span>Score: {score}</span>
+        <span>Rows: {rows}</span>
+        <span>Level: {level}</span>
       </div>
       {/* Controls/Start Button */}
       <div
         style={{
           width: '100%',
-          minHeight: 64,
+          height: '12rem',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'flex-end',
+          justifyContent: 'flex-start',
           alignItems: 'center',
           background: 'transparent',
           marginBottom: 8,
@@ -567,7 +521,7 @@ export default function Tetris() {
               padding: '1rem 2rem',
               border: 'none',
               cursor: 'pointer',
-              margin: '2rem 0',
+              margin: '0 0',
             }}
           >
             Start Game
@@ -586,7 +540,7 @@ export default function Tetris() {
             style={{
               position: 'absolute',
               top: 8,
-              left: 8,
+              left: 20,
               zIndex: 2,
               color: '#fff',
               border: 'none',
@@ -604,8 +558,8 @@ export default function Tetris() {
                 src={PauseButton}
                 alt="Pause"
                 style={{
-                  width: '48px',
-                  height: '48px',
+                  width: '24px',
+                  height: '24px',
                   display: 'block',
                 }}
               />
@@ -614,8 +568,8 @@ export default function Tetris() {
                 src={PlayButton}
                 alt="Play"
                 style={{
-                  width: '48px',
-                  height: '48px',
+                  width: '24px',
+                  height: '24px',
                   display: 'block',
                 }}
               />
@@ -631,7 +585,7 @@ export default function Tetris() {
             style={{
               position: 'absolute',
               top: 8,
-              right: 8,
+              right: 20,
               zIndex: 2,
               color: '#fff',
               border: 'none',
@@ -648,8 +602,8 @@ export default function Tetris() {
               src={ExitButton}
               alt="Exit"
               style={{
-                width: '48px',
-                height: '48px',
+                width: '24px',
+                height: '24px',
                 display: 'block',
               }}
             />
@@ -661,18 +615,35 @@ export default function Tetris() {
         <div
           style={{
             position: 'absolute',
-            top: '40%',
+            bottom: 0,
             left: 0,
             width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
             textAlign: 'center',
             color: '#fff',
             fontSize: '2rem',
             background: 'rgba(0,0,0,0.7)',
             padding: '2rem 0',
+            zIndex: 10,
           }}
         >
-          <div>Game Over</div>
-          <button onClick={startGame} style={{ marginTop: '1rem' }}>
+          <div className="text-6xl font-extrabold text-red-600">Game Over</div>
+          <button
+            onClick={startGame}
+            style={{
+              bottom: 0,
+              marginTop: '1rem',
+              border: 'solid 2px #fff',
+              padding: '0.5rem 1rem',
+              background: '#333',
+              color: '#fff',
+              cursor: 'pointer',
+            }}
+          >
             Start New Game
           </button>
         </div>
