@@ -8,6 +8,7 @@ import PlayButton from '../../../assets/tetris/playButton.png';
 import RightButton from '../../../assets/tetris/rightButton.png';
 import RotateButton from '../../../assets/tetris/rotateButton.png';
 import animateClearedRows from '../utils/tetris/animateClearedRows';
+import RepeatButton from '../utils/tetris/repeatButton';
 import '../utils/tetris/rowClearAnimations.css';
 import LEVEL_COLOR_THEMES from '../utils/tetris/tetrominoColors';
 
@@ -326,7 +327,7 @@ export default function Tetris() {
         marginBottom: '1rem',
       }}
     >
-      <button
+      <RepeatButton
         onClick={() => handleUnpauseAnd(() => movePlayer(-1))}
         className="control"
         style={{
@@ -349,8 +350,8 @@ export default function Tetris() {
           alt="Move Left"
           style={{ width: '60px', height: '60px', display: 'block' }}
         />
-      </button>
-      <button
+      </RepeatButton>
+      <RepeatButton
         onClick={() => handleUnpauseAnd(softDrop)}
         className="control"
         style={{
@@ -373,8 +374,8 @@ export default function Tetris() {
           alt="Move Down"
           style={{ width: '60px', height: '60px', display: 'block' }}
         />
-      </button>
-      <button
+      </RepeatButton>
+      <RepeatButton
         onClick={() => handleUnpauseAnd(rotatePlayer)}
         className="control"
         style={{
@@ -397,8 +398,8 @@ export default function Tetris() {
           alt="Rotate Right"
           style={{ width: '60px', height: '60px', display: 'block' }}
         />
-      </button>
-      <button
+      </RepeatButton>
+      <RepeatButton
         onClick={() => handleUnpauseAnd(() => movePlayer(1))}
         className="control"
         style={{
@@ -421,7 +422,7 @@ export default function Tetris() {
           alt="Move Right"
           style={{ width: '60px', height: '60px', display: 'block' }}
         />
-      </button>
+      </RepeatButton>
     </div>
   );
 
@@ -628,7 +629,7 @@ export default function Tetris() {
             fontSize: '2rem',
             background: 'rgba(0,0,0,0.7)',
             padding: '2rem 0',
-            zIndex: 10,
+            zIndex: 3,
           }}
         >
           <div className="text-6xl font-extrabold text-red-600">Game Over</div>
