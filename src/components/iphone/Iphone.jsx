@@ -44,20 +44,23 @@ const IphoneFrame = () => {
         onClick={() => handleBottomBar(appSrc, setAppSrc)}
         title="home button"
       />
-      <div className="flex items-center justify-center w-full h-full screen">
+      <div className="flex items-center justify-center screen">
         <div
           className="brightness"
           style={{ backgroundColor: `rgba(0, 0, 0, 0.${brightness})` }}
           id="brightness"
           key={brightness}
         />
-        <IphoneRouter
-          key={appSrc}
-          appSrc={appSrc}
-          setAppSrc={setAppSrc}
-          color={color}
-          setColor={setColor}
-        />
+
+        <div className="phone-content">
+          <IphoneRouter
+            key={appSrc}
+            appSrc={appSrc}
+            setAppSrc={setAppSrc}
+            color={color}
+            setColor={setColor}
+          />
+        </div>
       </div>
     </div>
   );

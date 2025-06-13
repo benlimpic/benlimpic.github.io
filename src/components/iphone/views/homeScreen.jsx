@@ -10,8 +10,17 @@ import Shelved from '../../../assets/shelved.png';
 import TetrisLogo from '../../../assets/tetris/tetris-logo.png';
 import App from '../utils/appIcon';
 import ExternalLink from '../utils/externalLink';
+import useLocalTime from '../utils/weather/useLocalTime';
 
 const HomeScreen = ({ setAppSrc }) => {
+  const { loading, time } = useLocalTime();
+
+  const formattedTime = time
+    ? `${time.getHours() % 12 === 0 ? 12 : time.getHours() % 12}:${time
+        .getMinutes()
+        .toString()
+        .padStart(2, '0')}`
+    : '--:--';
   return (
     <div
       className="relative w-full h-full home-screen"
@@ -24,7 +33,9 @@ const HomeScreen = ({ setAppSrc }) => {
     >
       <div className="flex items-center justify-between w-full h-12 px-4 homeNavTop">
         <div className="flex items-center h-12 pl-2 justify-left navLeft ">
-          <div className="text-white smallTime">00:00</div>
+          <div className="text-white smallTime">
+            {loading ? '--:--' : formattedTime}
+          </div>
         </div>
         <div className="flex items-center h-12 justify-right navRight ">
           <div className="text-white smallDate">

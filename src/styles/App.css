@@ -6,3 +6,21 @@
   justify-content: center;
   overflow: hidden;
 }
+
+/* Hide scrollbar for all browsers */
+::-webkit-scrollbar {
+  display: none;
+}
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.control,
+.control:focus,
+.control:active {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  outline: none;
+  touch-action: manipulation;
+}

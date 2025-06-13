@@ -10,10 +10,13 @@
     "deploy": "gh-pages -d dist -b main -f"
   },
   "dependencies": {
+    "lottie-react": "^2.4.1",
     "prop-types": "^15.8.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwindcss": "^3.4.17"
+    "react-tsparticles": "^2.12.2",
+    "tailwindcss": "^3.4.17",
+    "tsparticles": "^3.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

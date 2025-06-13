@@ -20,10 +20,10 @@ const TETROMINOS = {
   0: { shape: [[0]] },
   I: {
     shape: [
-      [0, 'I', 0, 0],
-      [0, 'I', 0, 0],
-      [0, 'I', 0, 0],
-      [0, 'I', 0, 0],
+      [0, 0, 0, 0],
+      ['I', 'I', 'I', 'I'],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
     ],
   },
   J: {
@@ -82,9 +82,8 @@ const checkCollision = (player, stage, { x: moveX, y: moveY }) => {
     for (let x = 0; x < player.tetromino[y].length; x += 1) {
       if (player.tetromino[y][x] !== 0) {
         if (
-          !stage[y + player.pos.y + moveY] ||
-          !stage[y + player.pos.y + moveY][x + player.pos.x + moveX] ||
-          stage[y + player.pos.y + moveY][x + player.pos.x + moveX][1] !==
+          !stage[y + player.pos.y + moveY]?.[x + player.pos.x + moveX] ||
+          stage[y + player.pos.y + moveY]?.[x + player.pos.x + moveX]?.[1] !==
             'clear'
         ) {
           return true;
@@ -94,6 +93,19 @@ const checkCollision = (player, stage, { x: moveX, y: moveY }) => {
   }
   return false;
 };
+
+// Pad a tetromino shape to 3x4 for preview (3 rows high, 4 columns wide)
+function padTo3x4(shape) {
+  const padded = [
+    ...shape.map((row) => {
+      const newRow = [...row];
+      while (newRow.length < 4) newRow.push(0);
+      return newRow;
+    }),
+  ];
+  while (padded.length < 3) padded.push([0, 0, 0, 0]);
+  return padded;
+}
 
 // Overlay the player's tetromino on the stage for rendering
 function getDisplayStage(stage, player) {
@@ -134,6 +146,7 @@ export default function Tetris() {
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [nextTetromino, setNextTetromino] = useState(randomTetromino().shape);
 
   const currentTheme = LEVEL_COLOR_THEMES[Math.min(level, 29)];
 
@@ -242,7 +255,8 @@ export default function Tetris() {
         setStage(sweptStage);
 
         // Prepare next tetromino
-        const next = randomTetromino().shape;
+        const next = nextTetromino;
+        setNextTetromino(randomTetromino().shape);
         const newPlayer = {
           pos: { x: STAGE_WIDTH / 2 - 2, y: 0 },
           tetromino: next,
@@ -260,7 +274,7 @@ export default function Tetris() {
         return newPlayer;
       }
     });
-  }, [stage, level, rows]);
+  }, [stage, level, rows, nextTetromino]);
 
   // Drop interval
   useEffect(() => {
@@ -308,6 +322,7 @@ export default function Tetris() {
     setGameOver(false);
     setGameStarted(true);
     setDropTime(1000);
+    setNextTetromino(randomTetromino().shape);
   };
 
   // On-screen controls
@@ -348,7 +363,14 @@ export default function Tetris() {
         <img
           src={LeftButton}
           alt="Move Left"
-          style={{ width: '60px', height: '60px', display: 'block' }}
+          draggable={false}
+          style={{
+            width: '60px',
+            height: '60px',
+            display: 'block',
+            userSelect: 'none',
+            pointerEvents: 'none',
+          }}
         />
       </RepeatButton>
       <RepeatButton
@@ -372,7 +394,14 @@ export default function Tetris() {
         <img
           src={DropButton}
           alt="Move Down"
-          style={{ width: '60px', height: '60px', display: 'block' }}
+          draggable={false}
+          style={{
+            width: '60px',
+            height: '60px',
+            display: 'block',
+            userSelect: 'none',
+            pointerEvents: 'none',
+          }}
         />
       </RepeatButton>
       <RepeatButton
@@ -381,12 +410,8 @@ export default function Tetris() {
         style={{
           gridColumn: 3,
           gridRow: 1,
-          background: 'none',
           border: 'none',
-          padding: 0,
-          margin: 0,
           cursor: 'pointer',
-          outline: 'none',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -396,7 +421,14 @@ export default function Tetris() {
         <img
           src={RotateButton}
           alt="Rotate Right"
-          style={{ width: '60px', height: '60px', display: 'block' }}
+          draggable={false}
+          style={{
+            width: '60px',
+            height: '60px',
+            display: 'block',
+            userSelect: 'none',
+            pointerEvents: 'none',
+          }}
         />
       </RepeatButton>
       <RepeatButton
@@ -420,7 +452,14 @@ export default function Tetris() {
         <img
           src={RightButton}
           alt="Move Right"
-          style={{ width: '60px', height: '60px', display: 'block' }}
+          draggable={false}
+          style={{
+            width: '60px',
+            height: '60px',
+            display: 'block',
+            userSelect: 'none',
+            pointerEvents: 'none',
+          }}
         />
       </RepeatButton>
     </div>
@@ -475,29 +514,78 @@ export default function Tetris() {
           ))
         )}
       </div>
-      {/* Stats */}
+
+      {/* Stats and Preview */}
       <div
         style={{
           width: '100%',
-          color: '#fff',
+          height: '6rem',
+          padding: '1rem',
           display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'start',
-          alignItems: 'start',
-          lineHeight: '2',
-          fontSize: '1rem',
-          margin: 0,
-          padding: 0,
-          borderTop: 'none',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           position: 'absolute',
+          background: 'transparent',
           top: '3rem',
-          left: '0.5rem',
           zIndex: 3,
+          gap: '1rem',
         }}
       >
-        <span>Score: {score}</span>
-        <span>Rows: {rows}</span>
-        <span>Level: {level}</span>
+        {/* Stats */}
+        <div
+          style={{
+            color: '#fff',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'start',
+            alignItems: 'start',
+            lineHeight: '2',
+            fontSize: '1rem',
+            margin: 0,
+            padding: 0,
+            borderTop: 'none',
+            position: 'relative',
+            minWidth: '7rem',
+          }}
+        >
+          <span>Score: {score}</span>
+          <span>Rows: {rows}</span>
+          <span>Level: {level}</span>
+        </div>
+        {/* Preview */}
+        <div
+          style={{
+            width: '4rem',
+            height: '3rem',
+            background: 'rgba(0,0,0,0.2)',
+            borderRadius: '8px',
+            display: 'grid',
+            gridTemplateRows: `repeat(3, 1fr)`,
+            gridTemplateColumns: `repeat(4, 1fr)`,
+            gap: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'relative',
+          }}
+        >
+          {padTo3x4(nextTetromino).map((row, y) =>
+            row.map((cell, x) => (
+              <div
+                key={`${y}-${x}`}
+                style={{
+                  background:
+                    cell === 0
+                      ? 'rgba(0,0,0,0.1)'
+                      : currentTheme.tetrominoColors[String(cell)] ??
+                        'rgba(255,255,255,0.9)',
+                  border: '1px solid #222',
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            ))
+          )}
+        </div>
       </div>
       {/* Controls/Start Button */}
       <div
@@ -519,10 +607,12 @@ export default function Tetris() {
               fontSize: '2rem',
               background: '#333',
               color: '#fff',
-              padding: '1rem 2rem',
+              padding: '0.5rem 1rem',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
               border: 'none',
               cursor: 'pointer',
-              margin: '0 0',
+              margin: '1rem',
             }}
           >
             Start Game

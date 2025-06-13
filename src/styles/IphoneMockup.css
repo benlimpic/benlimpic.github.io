@@ -79,8 +79,8 @@
 }
 
 .screen {
-  width: 100%;
-  height: 100%;
+  width: 362px;
+  height: 816px;
   border-radius: 45px;
   overflow: hidden;
   position: relative;
@@ -90,6 +90,13 @@
   width: 100%;
   height: 100%;
   border: none;
+}
+
+.phone-content {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .hidden {
