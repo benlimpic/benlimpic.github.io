@@ -1,0 +1,12 @@
+.book-spine {
+  @apply relative flex items-center justify-center w-16 transition-transform duration-300 border border-gray-800 rounded-md shadow-lg cursor-pointer sm:w-20 h-44 hover:scale-105;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.15),
+    rgba(0, 0, 0, 0.25)
+  );
+
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4), 2px 4px 8px rgba(0, 0, 0, 0.3);
+
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
+}
