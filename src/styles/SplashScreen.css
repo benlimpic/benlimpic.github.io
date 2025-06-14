@@ -1,0 +1,36 @@
+.splash-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 362px; /* exact width of screen */
+  height: 816px; /* exact height of screen */
+  background: black;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 45px;
+}
+
+.splash-logo {
+  width: 150px;
+  height: 150px;
+  opacity: 0;
+  transform: scale(0);
+  animation: splashAnimation 2s ease forwards;
+}
+
+@keyframes splashAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -1,43 +1,37 @@
 import PropTypes from 'prop-types';
 
-export default function WeatherWidget({ weather }) {
-  if (!weather) return null;
-
-  const tempF = weather.current.temp_f;
+const WeatherWidget = ({ weather }) => {
+  const city = weather.location.name;
+  const temp = Math.round(weather.current.temp_f);
   const condition = weather.current.condition.text;
   const iconUrl = `https:${weather.current.condition.icon}`;
+  const high = Math.round(weather.forecast.forecastday[0].day.maxtemp_f);
+  const low = Math.round(weather.forecast.forecastday[0].day.mintemp_f);
 
   return (
     <div
-      className="relative flex flex-col items-center justify-center w-32 text-white h-36"
+      className="flex flex-col items-start justify-center p-4 text-white"
       style={{
-        background: 'rgba(0, 0, 0, 0.25)',
-        backdropFilter: 'blur(4px)',
-        WebkitBackdropFilter: 'blur(6px)',
+        background: 'rgba(0, 0, 0, 0.3)',
         borderRadius: '1rem',
-        border: '3px solid rgba(255,255,255,0.05)',
-        boxShadow: '0 6px 24px rgba(0,0,0,0.4)',
-        padding: '0.5rem',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        width: '160px',
+        height: '160px',
       }}
     >
-      <img
-        src={iconUrl}
-        alt="weather"
-        className="mb-1 w-14 h-14 drop-shadow-lg"
-        style={{
-          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))',
-        }}
-      />
-      <div className="text-3xl font-semibold drop-shadow-lg">
-        {Math.round(tempF)}°<span className="text-lg font-light">F</span>
+      <div className="text-lg font-semibold">{city}</div>
+      <div className="flex items-center my-2">
+        <div className="text-5xl font-bold">{temp}°</div>
+        <img src={iconUrl} alt={condition} className="w-12 h-12 ml-2" />
       </div>
-      <div className="text-xs font-medium text-center drop-shadow-sm opacity-85">
-        {condition}
+      <div className="text-sm">{condition}</div>
+      <div className="text-sm">
+        H:{high}° L:{low}°
       </div>
     </div>
   );
-}
-
-WeatherWidget.propTypes = {
-  weather: PropTypes.object.isRequired,
 };
+
+WeatherWidget.propTypes = { weather: PropTypes.object.isRequired };
+export default WeatherWidget;
