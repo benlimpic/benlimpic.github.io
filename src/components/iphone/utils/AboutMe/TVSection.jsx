@@ -81,7 +81,7 @@ export default function TVSection() {
   };
 
   return (
-    <section className="relative mb-10">
+    <section className="relative w-full mb-16">
       <div className="flex items-center justify-start mb-4 group">
         <div className="w-0 h-1 mr-4 transition-all duration-500 bg-slate-800 group-hover:w-32"></div>
         <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200">

@@ -131,16 +131,19 @@ export default function BooksSection() {
     );
   };
 
+  // The middle book is always index 1 in the 3-book view
+  const centerBook = books[(currentIndex + 1) % books.length];
+
   return (
-    <section className="relative mb-10">
-      <div className="flex items-center justify-start mb-4 group">
-        <div className="w-0 h-1 mr-4 transition-all duration-500 bg-slate-800 group-hover:w-32"></div>
-        <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200">
+    <section className="relative w-full mb-8">
+      <div className="flex items-center justify-start group">
+        <div className="w-0 h-1 mr-4 transition-all duration-500 bg-slate-300 dark:bg-slate-700 group-hover:w-32"></div>
+        <h2 className="text-2xl font-semibold text-slate-700 dark:text-slate-200">
           Favorite Books
         </h2>
       </div>
 
-      <div className="relative w-full ht-1/2">
+      <div className="relative flex justify-center w-full">
         <img
           src={shelfImg}
           alt="Shelf"
@@ -150,7 +153,7 @@ export default function BooksSection() {
         <div className="absolute inset-0 flex items-center justify-center">
           <button
             onClick={() => paginate('left')}
-            className="absolute z-20 p-2 text-gray-600 bg-white rounded-full shadow-md opacity-90 hover:opacity-60 left-9 dark:bg-gray-800 dark:text-white"
+            className="absolute z-20 p-2 text-gray-600 bg-white rounded-full shadow-md opacity-90 hover:opacity-60 left-10 dark:bg-gray-800 dark:text-white"
           >
             ◀
           </button>
@@ -160,10 +163,18 @@ export default function BooksSection() {
               const index = (currentIndex + offset) % books.length;
               const book = books[index];
               return (
-                <div
+                <button
                   key={index}
                   onClick={() => handleSelect(index)}
-                  className="relative flex items-center justify-center flex-none w-10 h-40 overflow-hidden transition-transform duration-300 cursor-pointer sm:w-12 sm:h-44 hover:scale-105"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleSelect(index);
+                    }
+                  }}
+                  type="button"
+                  tabIndex={0}
+                  className="relative flex items-center justify-center flex-none w-16 overflow-hidden transition-transform duration-300 bg-transparent border-none cursor-pointer h-44 hover:scale-105 focus:outline-none"
+                  aria-label={`Select book: ${book.title}`}
                 >
                   <img
                     src={book.cover}
@@ -171,48 +182,53 @@ export default function BooksSection() {
                     className="w-auto h-full mx-auto"
                   />
                   <div
-                    className={`rotate-[-90deg] text-xs ${book.font} ${book.textColor} ${book.margin} font text-center whitespace-nowrap z-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`}
+                    className={`rotate-[-90deg] text-xs ${book.font} ${book.textColor} ${book.margin} font text-center whitespace-nowrap z-10 absolute`}
                   >
                     {book.title}
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>
 
           <button
             onClick={() => paginate('right')}
-            className="absolute z-20 p-2 text-gray-600 bg-white rounded-full shadow-md opacity-90 hover:opacity-60 right-9 dark:bg-gray-800 dark:text-white"
+            className="absolute z-20 p-2 text-gray-600 bg-white rounded-full shadow-md opacity-90 hover:opacity-60 right-10 dark:bg-gray-800 dark:text-white"
           >
             ▶
           </button>
         </div>
-
-        {selectedBook !== null && (
-          <>
-            <div
-              className="fixed inset-0 z-40 bg-black bg-opacity-50"
-              onClick={closeModal}
-            ></div>
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              <div className="w-full max-w-sm p-6 bg-white rounded-lg shadow-lg dark:bg-gray-900">
-                <h3 className="mb-2 text-xl font-bold">
-                  {books[selectedBook].title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {books[selectedBook].author}
-                </p>
-                <button
-                  onClick={closeModal}
-                  className="px-4 py-2 mt-4 text-white bg-blue-600 rounded hover:bg-blue-700"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </>
-        )}
       </div>
+
+      {/* Title displayed below shelf */}
+      <div className="font-sans text-sm text-center text-slate-800 dark:text-slate-200">
+        {centerBook.title}
+      </div>
+
+      {selectedBook !== null && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black bg-opacity-50"
+            onClick={closeModal}
+          ></div>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="w-full max-w-sm p-6 bg-white rounded-lg shadow-lg dark:bg-gray-900">
+              <h3 className="mb-2 text-xl font-bold">
+                {books[selectedBook].title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                {books[selectedBook].author}
+              </p>
+              <button
+                onClick={closeModal}
+                className="px-4 py-2 mt-4 text-white bg-blue-600 rounded hover:bg-blue-700"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </section>
   );
 }

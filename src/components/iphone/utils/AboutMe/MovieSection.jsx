@@ -36,10 +36,10 @@ export default function MoviesSection() {
   ];
 
   return (
-    <section className="relative mb-10">
-      <div className="flex items-center justify-start mb-8 group">
-        <div className="w-0 h-1 mr-4 transition-all duration-500 bg-slate-800 group-hover:w-32"></div>
-        <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200">
+    <section className="relative w-full mb-8">
+      <div className="flex items-center justify-start mb-4 group">
+        <div className="w-0 h-1 mr-4 transition-all duration-500 bg-slate-300 dark:bg-slate-700 group-hover:w-32"></div>
+        <h2 className="text-2xl font-semibold text-slate-700 dark:text-slate-200">
           Favorite Films
         </h2>
       </div>
@@ -63,9 +63,7 @@ export default function MoviesSection() {
               onClick={() => setSelectedMovie(movie)}
             >
               <div className="relative border-2 rounded-lg shadow-lg dark:bg-white dark:border-white border:">
-                {/* <div className="absolute top-0 bottom-0 left-[-10px] w-2 bg-white rounded-l-full" />
-                <div className="absolute top-0 bottom-0 right-[-10px] w-2 bg-white rounded-r-full" /> */}
-                <div className="w-full h-40 overflow-hidden rounded-lg sm:h-48">
+                <div className="w-40 overflow-hidden rounded-lg h-60">
                   <img
                     src={movie.poster}
                     alt={movie.title}
