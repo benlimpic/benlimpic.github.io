@@ -4,7 +4,7 @@ export default function ResumePage() {
       <div className="max-w-2xl px-6 py-10 mx-auto font-sans">
         <div className="flex justify-end mb-8">
           <a
-            href="/assets/Ben_Limpic_Full_Stack_Engineer.pdf"
+            href="/assets/Ben_Limpic_Full_Stack_Engineer (1).pdf"
             download
             className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
           >
