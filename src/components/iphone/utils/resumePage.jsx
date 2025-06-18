@@ -23,6 +23,7 @@ export default function ResumePage() {
           </p>
           <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
             <a
+              target="_blank"
               href="https://www.linkedin.com/in/benlimpic"
               className="text-blue-600 dark:text-blue-400"
             >
@@ -30,6 +31,7 @@ export default function ResumePage() {
             </a>{' '}
             |{' '}
             <a
+              target="_blank"
               href="https://github.com/benlimpic"
               className="text-blue-600 dark:text-blue-400"
             >
@@ -37,6 +39,7 @@ export default function ResumePage() {
             </a>{' '}
             |{' '}
             <a
+              target="_blank"
               href="https://portfolio.benlimpic.info/"
               className="text-blue-600 dark:text-blue-400"
             >
@@ -63,20 +66,49 @@ export default function ResumePage() {
           <div className="mb-4 border-t-4 border-slate-400 "></div>
           <div className="space-y-6 text-sm text-gray-800 dark:text-gray-100">
             {[
-              ['Languages', 'Java, JavaScript, TypeScript, Ruby'],
-              [
-                'Frameworks & Libraries',
-                'Spring Boot, React.js, Node.js, Ruby on Rails, Thymeleaf, Tailwind CSS, Bootstrap',
-              ],
-              ['Cloud & DevOps', 'AWS, GitHub'],
-              ['Databases', 'PostgreSQL, MySQL'],
-              ['Testing', 'JUnit, Jest, React Testing Library'],
-              ['Security', 'Spring Security, JWT, OAuth'],
-              [
-                'Web & Design',
-                'Canva, Figma, Squarespace, WordPress, Adobe Creative Suite',
-              ],
-            ].map(([title, items], i) => (
+              {
+                title: 'Languages',
+                items: ['Java', 'JavaScript', 'TypeScript', 'Ruby'],
+              },
+              {
+                title: 'Frameworks & Libraries',
+                items: [
+                  'Spring Boot',
+                  'React.js',
+                  'Node.js',
+                  'Ruby on Rails',
+                  'Thymeleaf',
+                  'Tailwind CSS',
+                  'Bootstrap',
+                ],
+              },
+              {
+                title: 'Cloud & DevOps',
+                items: ['AWS', 'GitHub'],
+              },
+              {
+                title: 'Databases',
+                items: ['PostgreSQL', 'MySQL'],
+              },
+              {
+                title: 'Testing',
+                items: ['JUnit', 'Jest', 'React Testing Library'],
+              },
+              {
+                title: 'Security',
+                items: ['Spring Security', 'JWT', 'OAuth'],
+              },
+              {
+                title: 'Web & Design',
+                items: [
+                  'Canva',
+                  'Figma',
+                  'Squarespace',
+                  'WordPress',
+                  'Adobe Creative Suite',
+                ],
+              },
+            ].map(({ title, items }, i) => (
               <div
                 key={title}
                 className={
@@ -85,10 +117,19 @@ export default function ResumePage() {
                     : ''
                 }
               >
-                <h3 className="font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-400 text-ms">
+                <h3 className="mb-2 text-xs font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-400">
                   {title}
                 </h3>
-                <p className="mt-1">{items}</p>
+                <div className="flex flex-wrap gap-2">
+                  {items.map((item) => (
+                    <span
+                      key={item}
+                      className="px-3 py-1 text-xs font-medium bg-gray-300 rounded dark:bg-gray-700 dark:text-white"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
@@ -105,6 +146,7 @@ export default function ResumePage() {
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               <a
+                target="_blank"
                 href="https://shelved-demo-app.benlimpic.info"
                 className="text-blue-600 dark:text-blue-400"
               >
@@ -112,6 +154,7 @@ export default function ResumePage() {
               </a>{' '}
               |{' '}
               <a
+                target="_blank"
                 href="https://github.com/benlimpic/Shelved_App"
                 className="text-blue-600 dark:text-blue-400"
               >
@@ -139,13 +182,15 @@ export default function ResumePage() {
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               <a
-                href="https://shelved-demo-app.benlimpic.info"
+                target="_blank"
+                href="https://www.loom.com/share/7c83a20e2af74ae29760e0dd6a161311?sid=072ff53d-730d-4f9d-b607-af7a5239fdcf"
                 className="text-blue-600 dark:text-blue-400"
               >
-                Demo
+                Demo Video
               </a>{' '}
               |{' '}
               <a
+                target="_blank"
                 href="https://github.com/benlimpic/lockbox-V1-frontend"
                 className="text-blue-600 dark:text-blue-400"
               >
@@ -153,6 +198,7 @@ export default function ResumePage() {
               </a>{' '}
               |{' '}
               <a
+                target="_blank"
                 href="https://github.com/benlimpic/lockbox-V1-backend"
                 className="text-blue-600 dark:text-blue-400"
               >
@@ -279,6 +325,7 @@ export default function ResumePage() {
         <div className="flex items-center justify-center">
           <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
             <a
+              target="_blank"
               href="https://www.linkedin.com/in/benlimpic"
               className="text-blue-600 dark:text-blue-400"
             >
@@ -286,6 +333,7 @@ export default function ResumePage() {
             </a>{' '}
             |{' '}
             <a
+              target="_blank"
               href="https://github.com/benlimpic"
               className="text-blue-600 dark:text-blue-400"
             >
@@ -293,6 +341,7 @@ export default function ResumePage() {
             </a>{' '}
             |{' '}
             <a
+              target="_blank"
               href="https://portfolio.benlimpic.info/"
               className="text-blue-600 dark:text-blue-400"
             >

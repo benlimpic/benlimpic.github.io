@@ -24,3 +24,7 @@ html {
   outline: none;
   touch-action: manipulation;
 }
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
