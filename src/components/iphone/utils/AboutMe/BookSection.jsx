@@ -153,7 +153,7 @@ export default function BooksSection() {
         <div className="absolute inset-0 flex items-center justify-center">
           <button
             onClick={() => paginate('left')}
-            className="absolute z-20 p-2 text-gray-600 bg-white rounded-full shadow-md opacity-90 hover:opacity-60 left-10 dark:bg-gray-800 dark:text-white"
+            className="absolute z-20 p-2 text-gray-600 bg-gray-200 rounded-full shadow-md opacity-50 hover:opacity-70 left-10 dark:bg-gray-800 dark:text-white"
           >
             ◀
           </button>
@@ -193,7 +193,7 @@ export default function BooksSection() {
 
           <button
             onClick={() => paginate('right')}
-            className="absolute z-20 p-2 text-gray-600 bg-white rounded-full shadow-md opacity-90 hover:opacity-60 right-10 dark:bg-gray-800 dark:text-white"
+            className="absolute z-20 p-2 text-gray-600 bg-gray-200 rounded-full shadow-md opacity-50 hover:opacity-70 right-10 dark:bg-gray-800 dark:text-white"
           >
             ▶
           </button>
